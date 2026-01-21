@@ -1,0 +1,88 @@
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+
+export default function Delivery() {
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: false
+  })
+
+  const phases = [
+    {
+      weeks: "Weeks 1-2",
+      focus: "Discovery + Structure",
+      description: "We align on goals, audiences, and what \"success\" means. We map the website structure and draft the first page layouts for quick feedback. (Approval Gate: Structure + wireframes)"
+    },
+    {
+      weeks: "Weeks 3-4",
+      focus: "Look & Feel System",
+      description: "We define the visual direction and the reusable design system, then shape the homepage story flow and key sections. (Approval Gate: Visual direction + system)"
+    },
+    {
+      weeks: "Weeks 5-7",
+      focus: "Build in WordPress",
+      description: "We build the site using reusable blocks and templates so your team can update it easily and safely. (Approval Gate: Working templates demo)"
+    },
+    {
+      weeks: "Weeks 8-9",
+      focus: "Tracking + HubSpot + Content",
+      description: "We connect forms and meeting booking, set up tracking, and load the core content so everything is measurable. (Approval Gate: Tracking + HubSpot validation)"
+    },
+    {
+      weeks: "Weeks 10-12",
+      focus: "Final QA + Launch + Enablement",
+      description: "We test across devices, polish performance, launch, and deliver training + documentation so the team can run it confidently. (Approval Gate: Launch readiness)"
+    }
+  ]
+
+  return (
+    <motion.section
+      className="min-h-screen py-32 px-6 relative overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          ref={ref}
+          className="mb-20"
+          initial={{ opacity: 0, y: 50 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 border-2 border-magenta rounded-lg flex items-center justify-center">
+              <span className="text-magenta text-2xl">⚙</span>
+            </div>
+            <h2 className="text-5xl md:text-7xl font-bold text-white">
+              A fast, structured delivery with <span className="text-gradient-magenta">clear checkpoints</span>
+            </h2>
+          </div>
+        </motion.div>
+
+        <div className="space-y-6">
+          {phases.map((phase, index) => (
+            <motion.div
+              key={index}
+              className="bg-dark-lighter/50 backdrop-blur-sm border border-magenta/20 rounded-2xl p-8 hover:border-magenta/50 transition-all duration-300"
+              initial={{ opacity: 0, x: -50 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <div className="text-blue text-lg font-semibold mb-2">{phase.weeks}</div>
+                  <div className="text-magenta text-2xl font-bold">{phase.focus}</div>
+                </div>
+                <div className="md:col-span-2">
+                  <p className="text-gray-300 leading-relaxed">{phase.description}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Línea de tiempo visual */}
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-magenta via-blue to-magenta opacity-20"></div>
+    </motion.section>
+  )
+}
