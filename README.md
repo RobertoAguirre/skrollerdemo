@@ -93,3 +93,4 @@ El sitio está optimizado para:
 - Desktop (1920px+)
 - Tablet (768px - 1919px)
 - Mobile (320px - 767px)
+
