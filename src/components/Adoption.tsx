@@ -1,20 +1,22 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Adoption() {
-  const { ref, inView } = useInView({
+const Adoption = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -56,7 +58,7 @@ export default function Adoption() {
         </motion.div>
       </div>
 
-      {/* Efectos de ondas de fondo */}
+      {/* Background wave effects */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
           {Array.from({ length: 10 }).map((_, i) => (
@@ -75,4 +77,8 @@ export default function Adoption() {
       </div>
     </motion.section>
   )
-}
+})
+
+Adoption.displayName = 'Adoption'
+
+export default Adoption

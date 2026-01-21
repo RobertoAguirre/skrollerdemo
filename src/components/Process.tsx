@@ -1,18 +1,15 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef, forwardRef } from 'react'
+import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Process() {
-  const { ref, inView } = useInView({
+const Process = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
 
   const deliverables = [
     "Discovery + SEO baseline",
@@ -25,12 +22,12 @@ export default function Process() {
 
   return (
     <motion.section
-      ref={containerRef}
+      ref={mergeRefs(ref, containerRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -97,7 +94,7 @@ export default function Process() {
         </div>
       </div>
 
-      {/* Líneas de fondo animadas */}
+      {/* Animated background lines */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
           {Array.from({ length: 15 }).map((_, i) => (
@@ -115,4 +112,8 @@ export default function Process() {
       </div>
     </motion.section>
   )
-}
+})
+
+Process.displayName = 'Process'
+
+export default Process

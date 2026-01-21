@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { useRef, forwardRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Storytelling() {
-  const { ref, inView } = useInView({
+const Storytelling = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -19,7 +20,7 @@ export default function Storytelling() {
 
   return (
     <motion.section
-      ref={containerRef}
+      ref={mergeRefs(ref, containerRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
       style={{ opacity }}
     >
@@ -33,7 +34,7 @@ export default function Storytelling() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
         >
           <div>
@@ -112,7 +113,7 @@ export default function Storytelling() {
         </motion.div>
       </div>
 
-      {/* Efectos de partículas decorativas */}
+      {/* Decorative particle effects */}
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 20 }).map((_, i) => (
           <motion.div
@@ -136,4 +137,8 @@ export default function Storytelling() {
       </div>
     </motion.section>
   )
-}
+})
+
+Storytelling.displayName = 'Storytelling'
+
+export default Storytelling

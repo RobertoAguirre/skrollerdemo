@@ -1,20 +1,22 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function SEOImpact() {
-  const { ref, inView } = useInView({
+const SEOImpact = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="grid grid-cols-1 lg:grid-cols-2 gap-16"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -53,13 +55,13 @@ export default function SEOImpact() {
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <p className="text-3xl font-light mb-2">Jorge Green</p>
-              <p className="text-sm">Cirugía bariatrica</p>
+              <p className="text-sm">Bariatric surgery</p>
             </motion.div>
           </div>
 
           {/* Paneles de reportes SEO */}
           <div className="space-y-6">
-            {[1, 2, 3].map((panel, index) => (
+            {[1, 2, 3].map((_panel, index) => (
               <motion.div
                 key={index}
                 className="bg-white/10 backdrop-blur-sm border border-magenta/20 rounded-2xl p-6"
@@ -86,7 +88,7 @@ export default function SEOImpact() {
         </motion.div>
       </div>
 
-      {/* Efectos de datos flotantes */}
+      {/* Floating data effects */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
         {Array.from({ length: 50 }).map((_, i) => (
           <motion.div
@@ -112,4 +114,8 @@ export default function SEOImpact() {
       </div>
     </motion.section>
   )
-}
+})
+
+SEOImpact.displayName = 'SEOImpact'
+
+export default SEOImpact

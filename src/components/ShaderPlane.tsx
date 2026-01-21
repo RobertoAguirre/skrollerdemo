@@ -32,7 +32,7 @@ export default function ShaderPlane() {
           vec2 uv = vUv;
           float time = uTime * 0.5;
           
-          // Patrón de ondas
+          // Wave pattern
           float wave = sin(uv.x * 10.0 + time) * sin(uv.y * 10.0 + time) * 0.5 + 0.5;
           
           // Gradiente radial

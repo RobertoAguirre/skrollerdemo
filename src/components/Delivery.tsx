@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Delivery() {
-  const { ref, inView } = useInView({
+const Delivery = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -38,11 +39,11 @@ export default function Delivery() {
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
           className="mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -81,8 +82,12 @@ export default function Delivery() {
         </div>
       </div>
 
-      {/* Línea de tiempo visual */}
+      {/* Visual timeline */}
       <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-magenta via-blue to-magenta opacity-20"></div>
     </motion.section>
   )
-}
+})
+
+Delivery.displayName = 'Delivery'
+
+export default Delivery

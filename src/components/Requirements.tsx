@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { useRef, forwardRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Requirements() {
-  const { ref, inView } = useInView({
+const Requirements = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -15,7 +16,6 @@ export default function Requirements() {
   })
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
 
   const requirements = [
     {
@@ -46,12 +46,12 @@ export default function Requirements() {
 
   return (
     <motion.section
-      ref={containerRef}
+      ref={mergeRefs(ref, containerRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -90,7 +90,7 @@ export default function Requirements() {
         </div>
       </div>
 
-      {/* Líneas decorativas de fondo */}
+      {/* Background decorative lines */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1000 1000">
           <motion.path
@@ -105,4 +105,8 @@ export default function Requirements() {
       </div>
     </motion.section>
   )
-}
+})
+
+Requirements.displayName = 'Requirements'
+
+export default Requirements

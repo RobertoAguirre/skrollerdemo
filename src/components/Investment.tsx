@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Investment() {
-  const { ref, inView } = useInView({
+const Investment = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -48,12 +49,12 @@ export default function Investment() {
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Resumen superior */}
         <motion.div
-          ref={ref}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -96,7 +97,7 @@ export default function Investment() {
                 <p className="text-gray-400 text-sm mb-4">What you receive:</p>
                 <ul className="space-y-3">
                   {stage.deliverables.map((item, itemIndex) => {
-                    const isHighlighted = index === 2 && itemIndex === 5 // Último item del Stage 3
+                    const isHighlighted = index === 2 && itemIndex === 5 // Last item of Stage 3
                     return (
                       <motion.li
                         key={itemIndex}
@@ -117,7 +118,7 @@ export default function Investment() {
         </div>
       </div>
 
-      {/* Efectos decorativos numéricos */}
+      {/* Numeric decorative effects */}
       <div className="absolute inset-0 pointer-events-none opacity-5">
         {Array.from({ length: 10 }).map((_, i) => (
           <motion.div
@@ -143,4 +144,8 @@ export default function Investment() {
       </div>
     </motion.section>
   )
-}
+})
+
+Investment.displayName = 'Investment'
+
+export default Investment

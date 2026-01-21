@@ -1,21 +1,21 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, forwardRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { gsap } from 'gsap'
 
-export default function Hero() {
-  const { ref, inView } = useInView({
+const Hero = forwardRef<HTMLElement>((_props, ref) => {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.3,
     triggerOnce: false
   })
 
-  const heroRef = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const subtitleRef = useRef<HTMLParagraphElement>(null)
   const buttonRef = useRef<HTMLDivElement>(null)
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: sectionRef,
     offset: ["start start", "end start"]
   })
 
@@ -48,11 +48,23 @@ export default function Hero() {
 
   return (
     <motion.section
-      ref={ref}
+      ref={(node) => {
+        if (typeof ref === 'function') {
+          ref(node)
+        } else if (ref) {
+          (ref as React.MutableRefObject<HTMLElement | null>).current = node
+        }
+        if (sectionRef.current !== node) {
+          (sectionRef as React.MutableRefObject<HTMLElement | null>).current = node
+        }
+        if (typeof inViewRef === 'function') {
+          inViewRef(node)
+        }
+      }}
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{ opacity, scale, y }}
     >
-      {/* Efecto de partículas flotantes adicionales */}
+      {/* Additional floating particle effects */}
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 50 }).map((_, i) => (
           <motion.div
@@ -76,7 +88,7 @@ export default function Hero() {
           />
         ))}
       </div>
-      {/* Overlay de líneas geométricas */}
+      {/* Geometric lines overlay */}
       <div className="absolute inset-0 opacity-20">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
           {Array.from({ length: 20 }).map((_, i) => (
@@ -140,4 +152,8 @@ export default function Hero() {
       </motion.div>
     </motion.section>
   )
-}
+})
+
+Hero.displayName = 'Hero'
+
+export default Hero

@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Premium() {
-  const { ref, inView } = useInView({
+const Premium = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -37,11 +38,11 @@ export default function Premium() {
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
           className="mb-20 text-center"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -80,11 +81,15 @@ export default function Premium() {
         </div>
       </div>
 
-      {/* Efectos decorativos de fondo */}
+      {/* Background decorative effects */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-magenta rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue rounded-full blur-3xl"></div>
       </div>
     </motion.section>
   )
-}
+})
+
+Premium.displayName = 'Premium'
+
+export default Premium

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Hero from './components/Hero'
 import Requirements from './components/Requirements'
 import Storytelling from './components/Storytelling'
@@ -16,9 +16,45 @@ import FinalSlide from './components/FinalSlide'
 import Navigation from './components/Navigation'
 import { Canvas } from '@react-three/fiber'
 import Scene3D from './components/Scene3D'
+import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
+
+  // Refs for each section
+  const heroRef = useRef<HTMLElement>(null)
+  const requirementsRef = useRef<HTMLElement>(null)
+  const storytellingRef = useRef<HTMLElement>(null)
+  const processRef = useRef<HTMLElement>(null)
+  const structureRef = useRef<HTMLElement>(null)
+  const premiumRef = useRef<HTMLElement>(null)
+  const experienceRef = useRef<HTMLElement>(null)
+  const adoptionRef = useRef<HTMLElement>(null)
+  const seoImpactRef = useRef<HTMLElement>(null)
+  const measurableRef = useRef<HTMLElement>(null)
+  const deliveryRef = useRef<HTMLElement>(null)
+  const aboutRef = useRef<HTMLElement>(null)
+  const investmentRef = useRef<HTMLElement>(null)
+  const finalSlideRef = useRef<HTMLElement>(null)
+
+  const sections = [
+    { id: 'hero', ref: heroRef },
+    { id: 'requirements', ref: requirementsRef },
+    { id: 'storytelling', ref: storytellingRef },
+    { id: 'process', ref: processRef },
+    { id: 'structure', ref: structureRef },
+    { id: 'premium', ref: premiumRef },
+    { id: 'experience', ref: experienceRef },
+    { id: 'adoption', ref: adoptionRef },
+    { id: 'seo-impact', ref: seoImpactRef },
+    { id: 'measurable', ref: measurableRef },
+    { id: 'delivery', ref: deliveryRef },
+    { id: 'about', ref: aboutRef },
+    { id: 'investment', ref: investmentRef },
+    { id: 'final-slide', ref: finalSlideRef },
+  ]
+
+  useKeyboardNavigation(sections)
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -28,7 +64,7 @@ function App() {
 
   return (
     <div className="relative">
-      {/* Canvas 3D de fondo con efectos avanzados */}
+      {/* 3D background canvas with advanced effects */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <Canvas 
           camera={{ position: [0, 0, 5], fov: 75 }}
@@ -45,23 +81,23 @@ function App() {
         </Canvas>
       </div>
 
-      {/* Contenido principal */}
+      {/* Main content */}
       <div className="relative z-10">
         <Navigation />
-        <Hero />
-        <Requirements />
-        <Storytelling />
-        <Process />
-        <Structure />
-        <Premium />
-        <Experience />
-        <Adoption />
-        <SEOImpact />
-        <Measurable />
-        <Delivery />
-        <About />
-        <Investment />
-        <FinalSlide />
+        <Hero ref={heroRef} />
+        <Requirements ref={requirementsRef} />
+        <Storytelling ref={storytellingRef} />
+        <Process ref={processRef} />
+        <Structure ref={structureRef} />
+        <Premium ref={premiumRef} />
+        <Experience ref={experienceRef} />
+        <Adoption ref={adoptionRef} />
+        <SEOImpact ref={seoImpactRef} />
+        <Measurable ref={measurableRef} />
+        <Delivery ref={deliveryRef} />
+        <About ref={aboutRef} />
+        <Investment ref={investmentRef} />
+        <FinalSlide ref={finalSlideRef} />
       </div>
     </div>
   )

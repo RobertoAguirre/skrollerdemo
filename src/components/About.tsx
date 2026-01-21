@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function About() {
-  const { ref, inView } = useInView({
+const About = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -41,11 +42,11 @@ export default function About() {
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
           className="mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -79,7 +80,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* Efectos de agua/fluido */}
+      {/* Water/fluid effects */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
           {Array.from({ length: 15 }).map((_, i) => (
@@ -98,4 +99,8 @@ export default function About() {
       </div>
     </motion.section>
   )
-}
+})
+
+About.displayName = 'About'
+
+export default About

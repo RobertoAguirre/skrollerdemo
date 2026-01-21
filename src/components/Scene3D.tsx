@@ -2,8 +2,7 @@ import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { Points, PointMaterial } from '@react-three/drei'
-import { Bloom, ChromaticAberration, EffectComposer, Glitch, Vignette } from '@react-three/postprocessing'
-import { GlitchMode } from 'postprocessing'
+import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing'
 import ShaderPlane from './ShaderPlane'
 
 interface Scene3DProps {
@@ -27,7 +26,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  // Partículas mejoradas con más densidad
+  // Improved particles with more density
   const particles = useMemo(() => {
     const count = 5000
     const positions = new Float32Array(count * 3)
@@ -54,7 +53,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     return { positions, colors, sizes }
   }, [])
 
-  // Líneas geométricas mejoradas con curvas más complejas
+  // Improved geometric lines with more complex curves
   const lines = useMemo(() => {
     const lineCount = 50
     const linesData: Array<{ geometry: THREE.BufferGeometry; material: THREE.LineBasicMaterial }> = []
@@ -87,7 +86,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     return linesData
   }, [])
 
-  // Geometría torus para efecto adicional
+  // Torus geometry for additional effect
   const torusGeometry = useMemo(() => new THREE.TorusGeometry(3, 0.5, 16, 100), [])
   const torusMaterial = useMemo(() => new THREE.MeshStandardMaterial({
     color: "#FF00FF",
@@ -97,7 +96,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     roughness: 0.2
   }), [])
 
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     if (pointsRef.current) {
       pointsRef.current.rotation.x = scrollY * 0.0001 + mouse.y * 0.1
       pointsRef.current.rotation.y = scrollY * 0.0002 + mouse.x * 0.1
@@ -124,7 +123,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
       <pointLight position={[-10, -10, -10]} intensity={2} color="#00BFFF" />
       <directionalLight position={[0, 10, 5]} intensity={1} />
       
-      {/* Partículas mejoradas con colores */}
+      {/* Improved particles with colors */}
       <Points ref={pointsRef} positions={particles.positions} stride={3} frustumCulled={false}>
         <PointMaterial
           transparent
@@ -137,30 +136,23 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
         />
       </Points>
 
-      {/* Líneas geométricas mejoradas */}
+      {/* Improved geometric lines */}
       <group ref={linesRef}>
         {lines.map((lineData, i) => (
           <primitive key={i} object={new THREE.Line(lineData.geometry, lineData.material)} />
         ))}
       </group>
 
-      {/* Torus flotante interactivo */}
+      {/* Interactive floating torus */}
       <mesh ref={meshRef} geometry={torusGeometry} material={torusMaterial} position={[0, 0, -5]} />
 
-      {/* Plano con shader personalizado */}
+      {/* Plane with custom shader */}
       <ShaderPlane />
 
-      {/* Efectos de post-procesamiento */}
+      {/* Post-processing effects */}
       <EffectComposer>
         <Bloom intensity={1.5} luminanceThreshold={0.9} luminanceSmoothing={0.9} />
-        <ChromaticAberration offset={[0.001, 0.001]} />
         <Vignette eskil={false} offset={0.1} darkness={0.5} />
-        <Glitch
-          delay={[1.5, 3.5]}
-          duration={[0.1, 0.3]}
-          strength={[0.2, 0.4]}
-          mode={GlitchMode.SPORADIC}
-        />
       </EffectComposer>
     </>
   )

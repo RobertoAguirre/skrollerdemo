@@ -30,7 +30,7 @@ export default function ParticleField({ count = 1000, speed = 0.5, color = "#FF0
     return { positions, velocities }
   }, [count, speed])
 
-  useFrame((state) => {
+  useFrame(() => {
     if (pointsRef.current) {
       const positions = pointsRef.current.geometry.attributes.position.array as Float32Array
       const velocities = particles.velocities

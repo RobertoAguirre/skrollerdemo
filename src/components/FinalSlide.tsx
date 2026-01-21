@@ -1,10 +1,11 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { gsap } from 'gsap'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function FinalSlide() {
-  const { ref, inView } = useInView({
+const FinalSlide = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.3,
     triggerOnce: false
   })
@@ -44,33 +45,83 @@ export default function FinalSlide() {
 
   return (
     <motion.section
-      ref={ref}
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
     >
-      {/* Fondo con efecto de campo de fútbol */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="w-full h-full bg-gradient-to-br from-green-900 via-green-800 to-green-900"></div>
-        {/* Líneas del campo */}
+      {/* Vibrant green soccer field background */}
+      <div className="absolute inset-0">
+        {/* Green base with more vibrant gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-green-500 to-green-600 opacity-70"></div>
+        
+        {/* Grass texture with stripes (cutting effect) */}
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                0deg,
+                rgba(34, 197, 94, 0.3) 0px,
+                rgba(34, 197, 94, 0.3) 2px,
+                rgba(22, 163, 74, 0.3) 2px,
+                rgba(22, 163, 74, 0.3) 4px
+              )
+            `,
+            backgroundSize: '100% 4px'
+          }}
+        ></div>
+
+        {/* Additional grass texture pattern */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 98px,
+                rgba(16, 185, 129, 0.1) 100px
+              )
+            `
+          }}
+        ></div>
+
+        {/* More visible field lines */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          <line x1="0" y1="500" x2="1000" y2="500" stroke="#FFFFFF" strokeWidth="2" opacity="0.3" />
-          <circle cx="500" cy="500" r="100" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.3" />
-          <rect x="0" y="200" width="200" height="600" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.3" />
-          <rect x="800" y="200" width="200" height="600" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.3" />
+          {/* Center line */}
+          <line x1="0" y1="500" x2="1000" y2="500" stroke="#FFFFFF" strokeWidth="3" opacity="0.8" />
+          {/* Center circle */}
+          <circle cx="500" cy="500" r="100" stroke="#FFFFFF" strokeWidth="3" fill="none" opacity="0.8" />
+          {/* Center point */}
+          <circle cx="500" cy="500" r="5" fill="#FFFFFF" opacity="0.9" />
+          {/* Left area */}
+          <rect x="0" y="200" width="200" height="600" stroke="#FFFFFF" strokeWidth="3" fill="none" opacity="0.8" />
+          <rect x="0" y="350" width="50" height="300" stroke="#FFFFFF" strokeWidth="3" fill="none" opacity="0.8" />
+          {/* Right area */}
+          <rect x="800" y="200" width="200" height="600" stroke="#FFFFFF" strokeWidth="3" fill="none" opacity="0.8" />
+          <rect x="950" y="350" width="50" height="300" stroke="#FFFFFF" strokeWidth="3" fill="none" opacity="0.8" />
+          {/* Corner lines */}
+          <path d="M 0 0 L 0 200 L 50 200" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.6" />
+          <path d="M 0 1000 L 0 800 L 50 800" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.6" />
+          <path d="M 1000 0 L 1000 200 L 950 200" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.6" />
+          <path d="M 1000 1000 L 1000 800 L 950 800" stroke="#FFFFFF" strokeWidth="2" fill="none" opacity="0.6" />
         </svg>
+
+        {/* Shadow for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/10"></div>
       </div>
 
-      {/* Overlay de líneas geométricas */}
-      <div className="absolute inset-0 opacity-20">
+      {/* Overlay of subtle green geometric lines */}
+      <div className="absolute inset-0 opacity-15">
         <svg className="w-full h-full" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-          {Array.from({ length: 15 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <motion.path
               key={i}
-              d={`M 0 ${100 + i * 60} Q 500 ${150 + i * 60} 1000 ${100 + i * 60}`}
-              stroke="#00FF88"
-              strokeWidth="1"
+              d={`M 0 ${100 + i * 75} Q 500 ${150 + i * 75} 1000 ${100 + i * 75}`}
+              stroke="#22C55E"
+              strokeWidth="1.5"
               fill="none"
               initial={{ pathLength: 0, opacity: 0 }}
-              animate={inView ? { pathLength: 1, opacity: 0.4 } : {}}
+              animate={inView ? { pathLength: 1, opacity: 0.3 } : {}}
               transition={{ duration: 2, delay: i * 0.1 }}
             />
           ))}
@@ -79,7 +130,7 @@ export default function FinalSlide() {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Lado izquierdo - Contenido principal */}
+          {/* Left side - Main content */}
           <div>
             <motion.h1
               ref={titleRef}
@@ -103,7 +154,7 @@ export default function FinalSlide() {
             </motion.p>
           </div>
 
-          {/* Lado derecho - Información de contacto */}
+          {/* Right side - Contact information */}
           <motion.div
             ref={contactRef}
             className="bg-dark-lighter/80 backdrop-blur-md border border-magenta/30 rounded-2xl p-8"
@@ -159,30 +210,37 @@ export default function FinalSlide() {
         </div>
       </div>
 
-      {/* Partículas decorativas */}
+      {/* More visible green decorative particles */}
       <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 30 }).map((_, i) => (
+        {Array.from({ length: 40 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-green-400 rounded-full"
+            className="absolute rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              backgroundColor: i % 2 === 0 ? '#22C55E' : '#16A34A',
             }}
             animate={{
-              y: [0, -50, 0],
-              x: [0, Math.random() * 30 - 15, 0],
-              opacity: [0, 0.6, 0],
-              scale: [0, 1, 0],
+              y: [0, -60, 0],
+              x: [0, Math.random() * 40 - 20, 0],
+              opacity: [0, 0.8, 0],
+              scale: [0, 1.2, 0],
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: 4 + Math.random() * 2,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: Math.random() * 4,
             }}
           />
         ))}
       </div>
     </motion.section>
   )
-}
+})
+
+FinalSlide.displayName = 'FinalSlide'
+
+export default FinalSlide

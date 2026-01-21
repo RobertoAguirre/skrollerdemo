@@ -1,9 +1,10 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { mergeRefs } from '../utils/mergeRefs'
 
-export default function Experience() {
-  const { ref, inView } = useInView({
+const Experience = forwardRef<HTMLElement>((_props, ref) => {
+  const { ref: inViewRef, inView } = useInView({
     threshold: 0.2,
     triggerOnce: false
   })
@@ -25,11 +26,12 @@ export default function Experience() {
 
   return (
     <motion.section
+      ref={mergeRefs(ref, inViewRef)}
       className="min-h-screen py-32 px-6 relative overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
-          ref={ref}
+          ref={inViewRef}
           className="mb-20"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -63,7 +65,7 @@ export default function Experience() {
                   </div>
                 </div>
                 
-                {/* Efectos decorativos */}
+                {/* Decorative effects */}
                 <motion.div
                   className="absolute -top-4 -right-4 w-24 h-24 bg-magenta/20 rounded-full blur-xl"
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -75,7 +77,7 @@ export default function Experience() {
         </div>
       </div>
 
-      {/* Partículas flotantes */}
+      {/* Floating particles */}
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 30 }).map((_, i) => (
           <motion.div
@@ -100,4 +102,8 @@ export default function Experience() {
       </div>
     </motion.section>
   )
-}
+})
+
+Experience.displayName = 'Experience'
+
+export default Experience
