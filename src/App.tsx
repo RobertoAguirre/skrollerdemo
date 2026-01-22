@@ -68,9 +68,9 @@ function App() {
   }, [])
 
   return (
-    <div className="relative">
+    <div className="relative w-full min-h-screen overflow-x-hidden">
       {/* 3D background canvas with advanced effects */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
+      <div className="fixed inset-0 z-0 pointer-events-none w-full h-full">
         <Canvas 
           camera={{ position: [0, 0, 5], fov: 75 }}
           gl={{ 
@@ -81,13 +81,14 @@ function App() {
             depth: true
           }}
           dpr={[1, 2]}
+          style={{ width: '100%', height: '100%' }}
         >
           <Scene3D scrollY={scrollY} sectionColors={activeColors} />
         </Canvas>
       </div>
 
       {/* Main content */}
-      <div className="relative z-10">
+      <div className="relative z-10 w-full">
         <Navigation />
         <Hero ref={heroRef} />
         <Requirements ref={requirementsRef} />

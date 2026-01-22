@@ -22,8 +22,12 @@ export default function Navigation() {
       transition={{ duration: 0.5 }}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <div className="text-white text-xl font-bold">
-          visor<span className="text-blue-light">lab</span>
+        <div className="flex items-center">
+          <img 
+            src="/VisorLab_logo.png.webp" 
+            alt="VisorLab" 
+            className="h-8 w-auto"
+          />
         </div>
         {/* Skroller logo */}
         <div className="flex items-center gap-2">
