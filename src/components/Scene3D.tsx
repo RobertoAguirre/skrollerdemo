@@ -8,9 +8,11 @@ import SportBall from './SportBall'
 
 interface Scene3DProps {
   scrollY: number
+  sectionColors?: { primary: string; secondary: string; emissive: string }
 }
 
-export default function Scene3D({ scrollY }: Scene3DProps) {
+export default function Scene3D({ scrollY, sectionColors }: Scene3DProps) {
+  const colors = sectionColors || { primary: '#22C55E', secondary: '#16A34A', emissive: '#10B981' }
   const pointsRef = useRef<THREE.Points>(null)
   const linesRef = useRef<THREE.Group>(null)
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
@@ -26,15 +28,15 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  // Improved particles with more density
+  // Improved particles with more density - colors based on active section
   const particles = useMemo(() => {
     const count = 5000
     const positions = new Float32Array(count * 3)
-    const colors = new Float32Array(count * 3)
+    const particleColors = new Float32Array(count * 3)
     const sizes = new Float32Array(count)
     
-    const color1 = new THREE.Color("#FF00FF")
-    const color2 = new THREE.Color("#00BFFF")
+    const color1 = new THREE.Color(colors.primary)
+    const color2 = new THREE.Color(colors.secondary)
     
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
@@ -43,15 +45,15 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
       positions[i3 + 2] = (Math.random() - 0.5) * 30
       
       const mixedColor = color1.clone().lerp(color2, Math.random())
-      colors[i3] = mixedColor.r
-      colors[i3 + 1] = mixedColor.g
-      colors[i3 + 2] = mixedColor.b
+      particleColors[i3] = mixedColor.r
+      particleColors[i3 + 1] = mixedColor.g
+      particleColors[i3 + 2] = mixedColor.b
       
       sizes[i] = Math.random() * 0.1 + 0.05
     }
     
-    return { positions, colors, sizes }
-  }, [])
+    return { positions, colors: particleColors, sizes }
+  }, [colors])
 
   // Improved geometric lines with more complex curves
   const lines = useMemo(() => {
@@ -75,7 +77,7 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
       const geometry = new THREE.BufferGeometry()
       geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3))
       const material = new THREE.LineBasicMaterial({
-        color: i % 2 === 0 ? "#FF00FF" : "#00BFFF",
+        color: i % 2 === 0 ? colors.primary : colors.secondary,
         opacity: 0.3,
         transparent: true,
         linewidth: 2
@@ -102,8 +104,8 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
   return (
     <>
       <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={2} color="#FF00FF" />
-      <pointLight position={[-10, -10, -10]} intensity={2} color="#00BFFF" />
+      <pointLight position={[10, 10, 10]} intensity={2} color={colors.primary} />
+      <pointLight position={[-10, -10, -10]} intensity={2} color={colors.secondary} />
       <directionalLight position={[0, 10, 5]} intensity={1} />
       
       {/* Improved particles with colors */}
@@ -126,11 +128,11 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
         ))}
       </group>
 
-      {/* Sport ball that changes between different ball types */}
-      <SportBall mouse={mouse} scrollY={scrollY} />
+      {/* Sport ball with interactive mouse control */}
+      <SportBall mouse={mouse} scrollY={scrollY} color={colors} />
 
       {/* Plane with custom shader */}
-      <ShaderPlane />
+      <ShaderPlane colors={colors} />
 
       {/* Post-processing effects */}
       <EffectComposer>

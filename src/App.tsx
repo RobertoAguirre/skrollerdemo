@@ -17,6 +17,7 @@ import Navigation from './components/Navigation'
 import { Canvas } from '@react-three/fiber'
 import Scene3D from './components/Scene3D'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
+import { useActiveSection, sectionColors } from './hooks/useActiveSection'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
@@ -55,6 +56,10 @@ function App() {
   ]
 
   useKeyboardNavigation(sections)
+  
+  // Get active section and its colors
+  const activeSection = useActiveSection(sections)
+  const activeColors = sectionColors[activeSection] || sectionColors.hero
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -77,7 +82,7 @@ function App() {
           }}
           dpr={[1, 2]}
         >
-          <Scene3D scrollY={scrollY} />
+          <Scene3D scrollY={scrollY} sectionColors={activeColors} />
         </Canvas>
       </div>
 

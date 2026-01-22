@@ -2,15 +2,21 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-export default function ShaderPlane() {
+interface ShaderPlaneProps {
+  colors?: { primary: string; secondary: string; emissive: string }
+}
+
+export default function ShaderPlane({ colors }: ShaderPlaneProps) {
   const meshRef = useRef<THREE.Mesh>(null)
+  const defaultColors = { primary: '#22C55E', secondary: '#16A34A', emissive: '#10B981' }
+  const activeColors = colors || defaultColors
 
   const shaderMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColor1: { value: new THREE.Color("#FF00FF") },
-        uColor2: { value: new THREE.Color("#00BFFF") }
+        uColor1: { value: new THREE.Color(activeColors.primary) },
+        uColor2: { value: new THREE.Color(activeColors.secondary) }
       },
       vertexShader: `
         varying vec2 vUv;
@@ -48,11 +54,14 @@ export default function ShaderPlane() {
       transparent: true,
       side: THREE.DoubleSide
     })
-  }, [])
+  }, [activeColors])
 
   useFrame((state) => {
     if (meshRef.current && shaderMaterial.uniforms) {
       shaderMaterial.uniforms.uTime.value = state.clock.elapsedTime
+      // Update colors dynamically
+      shaderMaterial.uniforms.uColor1.value = new THREE.Color(activeColors.primary)
+      shaderMaterial.uniforms.uColor2.value = new THREE.Color(activeColors.secondary)
     }
   })
 
