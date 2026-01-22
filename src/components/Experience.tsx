@@ -56,13 +56,21 @@ const Experience = forwardRef<HTMLElement>((_props, ref) => {
                 <p className="text-gray-300 text-lg leading-relaxed">{project.description}</p>
               </div>
               
-              {/* Placeholder para mockups */}
+              {/* Sport-themed images */}
               <div className="relative">
-                <div className="bg-dark-lighter/50 backdrop-blur-sm border border-magenta/20 rounded-2xl p-8 aspect-[9/16] flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-6xl mb-4">📱</div>
-                    <p className="text-gray-400 text-sm">Mobile mockups</p>
-                  </div>
+                <div className="bg-dark-lighter/50 backdrop-blur-sm border border-magenta/20 rounded-2xl p-8 aspect-[9/16] overflow-hidden relative">
+                  <img 
+                    src={index === 0 
+                      ? "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=400&h=700&fit=crop&q=80"
+                      : index === 1
+                      ? "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&h=700&fit=crop&q=80"
+                      : "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=400&h=700&fit=crop&q=80"
+                    }
+                    alt={index === 0 ? "Soccer" : index === 1 ? "Basketball" : "Tennis"}
+                    className="w-full h-full object-cover opacity-60"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark via-transparent to-transparent"></div>
                 </div>
                 
                 {/* Decorative effects */}

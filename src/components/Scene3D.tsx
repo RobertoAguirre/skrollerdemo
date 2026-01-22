@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { Points, PointMaterial } from '@react-three/drei'
 import { Bloom, EffectComposer, Vignette } from '@react-three/postprocessing'
 import ShaderPlane from './ShaderPlane'
+import SportBall from './SportBall'
 
 interface Scene3DProps {
   scrollY: number
@@ -12,7 +13,6 @@ interface Scene3DProps {
 export default function Scene3D({ scrollY }: Scene3DProps) {
   const pointsRef = useRef<THREE.Points>(null)
   const linesRef = useRef<THREE.Group>(null)
-  const meshRef = useRef<THREE.Mesh>(null)
   const [mouse, setMouse] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -86,16 +86,6 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     return linesData
   }, [])
 
-  // Torus geometry for additional effect
-  const torusGeometry = useMemo(() => new THREE.TorusGeometry(3, 0.5, 16, 100), [])
-  const torusMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: "#FF00FF",
-    emissive: "#FF00FF",
-    emissiveIntensity: 0.5,
-    metalness: 0.8,
-    roughness: 0.2
-  }), [])
-
   useFrame((_state, delta) => {
     if (pointsRef.current) {
       pointsRef.current.rotation.x = scrollY * 0.0001 + mouse.y * 0.1
@@ -106,13 +96,6 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
     if (linesRef.current) {
       linesRef.current.rotation.z = scrollY * 0.0001 + mouse.x * 0.05
       linesRef.current.rotation.x = mouse.y * 0.05
-    }
-
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2
-      meshRef.current.rotation.y += delta * 0.3
-      meshRef.current.position.x = mouse.x * 2
-      meshRef.current.position.y = mouse.y * 2
     }
   })
 
@@ -143,8 +126,8 @@ export default function Scene3D({ scrollY }: Scene3DProps) {
         ))}
       </group>
 
-      {/* Interactive floating torus */}
-      <mesh ref={meshRef} geometry={torusGeometry} material={torusMaterial} position={[0, 0, -5]} />
+      {/* Sport ball that changes between different ball types */}
+      <SportBall mouse={mouse} scrollY={scrollY} />
 
       {/* Plane with custom shader */}
       <ShaderPlane />

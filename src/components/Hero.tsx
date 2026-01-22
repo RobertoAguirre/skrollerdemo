@@ -64,6 +64,42 @@ const Hero = forwardRef<HTMLElement>((_props, ref) => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{ opacity, scale, y }}
     >
+      {/* Sport images overlay - subtle background references */}
+      <div className="absolute inset-0 pointer-events-none opacity-5">
+        <div className="absolute top-10 left-10 w-32 h-32">
+          <img 
+            src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&h=200&fit=crop&q=80" 
+            alt="Soccer" 
+            className="w-full h-full object-cover rounded-full blur-sm"
+            loading="lazy"
+          />
+        </div>
+        <div className="absolute top-20 right-20 w-24 h-24">
+          <img 
+            src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=200&h=200&fit=crop&q=80" 
+            alt="Basketball" 
+            className="w-full h-full object-cover rounded-full blur-sm"
+            loading="lazy"
+          />
+        </div>
+        <div className="absolute bottom-20 left-20 w-28 h-28">
+          <img 
+            src="https://images.unsplash.com/photo-1534158914592-062992fbe900?w=200&h=200&fit=crop&q=80" 
+            alt="Tennis" 
+            className="w-full h-full object-cover rounded-full blur-sm"
+            loading="lazy"
+          />
+        </div>
+        <div className="absolute bottom-10 right-10 w-36 h-36">
+          <img 
+            src="https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=200&h=200&fit=crop&q=80" 
+            alt="Sports" 
+            className="w-full h-full object-cover rounded-full blur-sm"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
       {/* Additional floating particle effects */}
       <div className="absolute inset-0 pointer-events-none">
         {Array.from({ length: 50 }).map((_, i) => (
