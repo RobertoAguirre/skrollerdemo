@@ -157,8 +157,23 @@ const FinalSlide = forwardRef<HTMLElement>((_props, ref) => {
           {/* Right side - Contact information */}
           <motion.div
             ref={contactRef}
-            className="bg-dark-lighter/80 backdrop-blur-md border border-magenta/30 rounded-2xl p-8"
+            className="space-y-6"
           >
+            {/* Skroller logo */}
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <img 
+                src="/skrollerlogo.svg" 
+                alt="Skroller" 
+                className="h-12 md:h-16 w-auto"
+              />
+            </motion.div>
+            
+            <div className="bg-dark-lighter/80 backdrop-blur-md border border-magenta/30 rounded-2xl p-8">
             <div className="mb-6">
               <h3 className="text-white text-2xl font-bold mb-2">VisorLab</h3>
             </div>
@@ -206,6 +221,7 @@ const FinalSlide = forwardRef<HTMLElement>((_props, ref) => {
             >
               Get in Touch
             </motion.button>
+            </div>
           </motion.div>
         </div>
       </div>

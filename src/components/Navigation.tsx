@@ -25,11 +25,13 @@ export default function Navigation() {
         <div className="text-white text-xl font-bold">
           visor<span className="text-blue-light">lab</span>
         </div>
-        {/* Skroller logo - using text with styling inspired by skroller.com */}
+        {/* Skroller logo */}
         <div className="flex items-center gap-2">
-          <div className="text-white text-xl font-bold">
-            skro<span className="text-magenta">ler</span>
-          </div>
+          <img 
+            src="/skrollerlogo.svg" 
+            alt="Skroller" 
+            className="h-8 w-auto"
+          />
         </div>
       </div>
     </motion.nav>

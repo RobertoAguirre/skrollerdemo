@@ -143,6 +143,20 @@ const Hero = forwardRef<HTMLElement>((_props, ref) => {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+        {/* Skroller logo */}
+        <motion.div
+          className="mb-8 flex justify-center"
+          initial={{ opacity: 0, y: -20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <img 
+            src="/skrollerlogo.svg" 
+            alt="Skroller" 
+            className="h-12 md:h-16 w-auto"
+          />
+        </motion.div>
+        
         <h1
           ref={titleRef}
           className="text-6xl md:text-8xl font-bold mb-6 leading-tight"
