@@ -63,10 +63,10 @@ const Experience = forwardRef<HTMLElement>((_props, ref) => {
                     src={index === 0 
                       ? "/eiffel1.jpeg"
                       : index === 1
-                      ? "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400&h=700&fit=crop&q=80"
-                      : "https://images.unsplash.com/photo-1534158914592-062992fbe900?w=400&h=700&fit=crop&q=80"
+                      ? "/soun.png"
+                      : "/doctor1.png"
                     }
-                    alt={index === 0 ? "Prepa Eiffel Mobile App" : index === 1 ? "Basketball" : "Tennis"}
+                    alt={index === 0 ? "Prepa Eiffel Mobile App" : index === 1 ? "Soun Fahn Ya - Cultural Experience" : "Dr. Jorge Green - Medical Tourism"}
                     className="w-full h-full object-cover opacity-90"
                     loading="lazy"
                   />
